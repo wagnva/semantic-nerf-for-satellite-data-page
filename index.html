@@ -38,6 +38,7 @@
   <link rel="shortcut icon" href="./static/images/favicon/favicon.ico" />
   <link rel="apple-touch-icon" sizes="180x180" href="./static/images/favicon/apple-touch-icon.png" />
   <link rel="manifest" href="./static/images/favicon/site.webmanifest" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css" />
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -45,7 +46,8 @@
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
+  <!-- https://github.com/sneas/img-comparison-slider -->
+  <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
 </head>
 <body>
 
@@ -242,6 +244,83 @@
         </div>
       </div>
     </div> 
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop has-text-justified">
+
+    <h2 class="title">Transient Regularization</h2>
+
+    <p>
+      Some text about how the transient regularization loss works
+    </p>
+
+    <p>
+      \(L_{t}(\mathcal{R}^t) = \sum_{r \in \mathcal{R}^t} || 1.0 - \beta(r)  ||^2_2 
+      \label{eq:car_reg_loss}\)
+    </p>
+
+    <div class="columns is-vcentered mt-3">
+
+        <!-- <div class="column">
+          <div class="image-comp">
+            <div style="background-image: url('./static/images/dataset/JAX_004_012_RGB.jpg')" alt="" class="img background"> </div>
+            <div style="background-image: url('./static/images/dataset/JAX_004_012_CLS.jpg')" alt="" class="img foreground"> </div>
+            <input type="range" min="1" max="100" value="50" name='slider' class="slider">
+            <div class='slider-button'></div>
+          </div>
+        </div> -->
+
+        <!-- Before/After for JAX068 -->
+        <div class="column">
+          <img-comparison-slider class="slider-with-animated-handle">
+            <figure slot="first" class="before">
+              <img width="100%" src="./static/images/car_reg/JAX_068_010_RGB_-1_NCR.png">
+              <figcaption>SatNeRF</figcaption>
+            </figure>
+
+            <figure slot="second" class="after">
+              <img width="100%" src="./static/images/car_reg/JAX_068_010_RGB_-1_WCR.png">
+              <figcaption>Ours</figcaption>
+            </figure>
+
+            <svg slot="handle" class="custom-animated-handle" xmlns="http://www.w3.org/2000/svg" width="100" viewBox="-8 -3 16 6">
+              <path stroke="#fff" d="M -5 -2 L -7 0 L -5 2 M -5 -2 L -5 2 M 5 -2 L 7 0 L 5 2 M 5 -2 L 5 2" stroke-width="1" fill="#fff" vector-effect="non-scaling-stroke"></path>
+            </svg>
+          </img-comparison-slider>
+        </div>
+
+        <!-- Before/After for JAX214 -->
+        <div class="column">
+          <img-comparison-slider class="slider-with-animated-handle">
+            <figure slot="first" class="before">
+              <img width="100%" src="./static/images/car_reg/JAX_214_019_RGB_-1_NCR.png">
+              <figcaption>SatNeRF</figcaption>
+            </figure>
+
+            <figure slot="second" class="after">
+              <img width="100%" src="./static/images/car_reg/JAX_214_019_RGB_-1_WCR.png">
+              <figcaption>Ours</figcaption>
+            </figure>
+
+            <svg slot="handle" class="custom-animated-handle" xmlns="http://www.w3.org/2000/svg" width="100" viewBox="-8 -3 16 6">
+              <path stroke="#fff" d="M -5 -2 L -7 0 L -5 2 M -5 -2 L -5 2 M 5 -2 L 7 0 L 5 2 M 5 -2 L 5 2" stroke-width="1" fill="#fff" vector-effect="non-scaling-stroke"></path>
+            </svg>
+          </img-comparison-slider>
+        </div>
+
+    </div>
+
+    <div class="columns has-text-centered  is-hidden-mobile">
+      <div class="column">
+        <h5 class="subtitle is-6">JAX 068</h5>
+      </div>
+      <div class="column">
+        <h5 class="subtitle is-6">JAX 214</h5>
+      </div>
+    </div>
 
   </div>
 </section>

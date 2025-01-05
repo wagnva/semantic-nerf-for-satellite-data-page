@@ -11,4 +11,15 @@ $(document).ready(function() {
 
     });
 
+    $(".image-comp").each((i) => {
+      i.find("slider").on("input change", (e)=>{
+        const sliderPos = e.target.value;
+        // Update the width of the foreground image
+        i.find('.foreground').css('width', `${sliderPos}%`)
+        // Update the position of the slider button
+        i.find('.slider-button').css('width', `${sliderPos}%`)
+      });
+    })
+    
+
 })
