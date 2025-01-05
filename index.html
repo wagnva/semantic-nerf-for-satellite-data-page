@@ -95,7 +95,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Semantic Neural Radiance Fields for Multi-Date Satellite Data</h1>
+          <h1 class="title is-1 publication-title">Semantic Neural Radiance Fields for <br>Multi-Date Satellite Data</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               Valentin Wagner,</span>
@@ -132,16 +132,6 @@
                   <span>arXiv</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-youtube"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
               <!-- Code Link. -->
               <span class="link-block">
                 <a href="https://github.com/google/nerfies"
@@ -161,6 +151,7 @@
                   </span>
                   <span>Data</span>
                   </a>
+              </span>
             </div>
 
           </div>
@@ -236,13 +227,13 @@
     <!-- Paper video. -->
     <div class="columns is-centered has-text-centered mt-5">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Pipeline Overview</h2>
+        <h2 class="title is-3">Overview</h2>
         <div class="publication-video">
           <img src="static/images/Pipeline.png" alt="">
         </div>
         <div class="content has-text-justified">
           <p>
-            Overview of our proposed model. The satellite-domain-adapted outputs (i.e. elements in the blue area) are combined using an
+            The satellite-domain-adapted outputs (i.e. elements in the blue area) are combined using an
             irradiance lighting model to produce the color rendering as originally proposed by <a href="https://arxiv.org/abs/2203.08896">SatNeRF</a>. Using an additional semantic head (i.e.
             elements in the red area) our proposed method is able to produce a corresponding semantic pixel-wise labeling. We combine this with
             the learned lighting scalar to create a three-dimensional semantic visualization. We introduce a transient regularization loss \(L_t\) to reduce
@@ -255,6 +246,60 @@
   </div>
 </section>
 
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <h2 class="title">Dataset</h2>
+
+    <p>
+      We release a dataset comprising of high-quality semantic annotations for the main Area-of-Interest for four scenes from the <a href="https://ieee-dataport.org/open-access/data-fusion-contest-2019-dfc2019">DFC-2019 Track-3 Dataset</a>.
+      To create the annotations we manually refine initial rough estimates of a user guided, class agnostic foundation model for semantic segmentation.
+    </p>
+    <p class="mt-2">
+      The dataset covers the five semantic classes: <span class="is-italic">Ground, Water, Vegetation, Building</span> and <span class="is-italic">Vehicles</span>.
+    </p>
+
+    <!-- Dataset Link. -->
+    <div class="mt-3">
+      <span class="link-block">
+        <a href="https://github.com/google/nerfies/releases/tag/0.1"
+            class="external-link button is-normal is-rounded is-dark">
+          <span class="icon">
+              <i class="far fa-images"></i>
+          </span>
+          <span>Data</span>
+          </a>
+      </span>
+    </div>
+    
+
+    <div class="columns is-centered is-mobile is-multiline mt-3"> 
+      
+      <div class="column is-half-mobile has-text-centered">
+          <img src="./static/images/dataset/JAX_004_012_RGB.jpg" alt="">
+          <img src="./static/images/dataset/JAX_004_012_CLS.jpg" alt="" class="mt-3">
+          <h5 class="subtitle is-6 mt-2">JAX 004</h5>
+      </div>
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/dataset/JAX_068_012_RGB.jpg" alt="">
+        <img src="./static/images/dataset/JAX_068_012_CLS.jpg" alt="" class="mt-3">
+        <h5 class="subtitle is-6 mt-2">JAX 068</h5>
+      </div>
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/dataset/JAX_214_012_RGB.jpg" alt="">
+        <img src="./static/images/dataset/JAX_214_012_CLS.jpg" alt="" class="mt-3">
+        <h5 class="subtitle is-6 mt-2">JAX 214</h5>
+      </div>
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/dataset/JAX_260_012_RGB.jpg" alt="">
+        <img src="./static/images/dataset/JAX_260_012_CLS.jpg" alt="" class="mt-3">
+        <h5 class="subtitle is-6 mt-2">JAX 260</h5>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
 
 <section class="section" id="BibTeX">
