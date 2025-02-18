@@ -261,6 +261,195 @@
 
     <h2 class="title">Semantic Neural Radiance Fields for Multi-Date Satellite Data</h2>
 
+    <p>
+      <b>Goal:</b> Learn an implicit, combined color and semantic 3D representation of a scene based on a set of satellite images (~10-20 images) including their camera (RPC) data.
+    </p>
+
+    <p class="mt-2"><b>Our Contribution:</b> We extend the satellite-domain-adapted <a href="https://arxiv.org/abs/2203.08896">SatNeRF</a> to include semantic as additional modality besides color. Our proposed semantic satellite-domain-adapted NeRF models following function: </p>
+
+    <p class="mt-3">
+      \(\large \mathcal{F}: (\mathbf{x}, \mathbf{\omega}, \mathbf{t}_j) \mapsto (\sigma, \mathbf{c}_a, \mathit{sun}, \mathbf{a}, \beta, \mathbf{s})\)
+    </p>
+
+    <div class="columns is-centered is-mobile is-multiline mt-0">
+      <div class="column is-half-mobile pt-1 pb-0">
+        <p><b>Inputs: </b></p>
+        <p>\(\mathbf{x} = \text{3D Position}  \)</p>
+        <p>\(\mathbf{t}_j = \text{Transient Embedding} \)</p>
+        <p>\(\omega = \text{Sun Direction} \)</p>
+      </div>
+
+      <div class="column is-half-mobile pt-1 pb-0">
+        <p><b>Geometry: </b></p>
+        <p>\(\sigma = \text{Density} \)</p>
+      </div>
+
+      <div class="column is-half-mobile pt-1 pb-0">
+        <p><b>Color: </b></p>
+        <p>\(\mathbf{c}_a = \text{Albedo Color} \)</p>
+        <p>\(sun = \text{Lighting} \)</p>
+        <p>\(\mathbf{a} = \text{Ambient Color} \)</p>
+      </div>
+
+      <div class="column is-half-mobile pt-1 pb-0">
+        <p><b>Semantic: </b></p>
+        <p>\(\mathbf{s} = \text{Semantic Logits} \)</p>
+      </div>
+    </div>
+
+    <p class="mt-0">
+      <b>Usage:</b> For each pixel a visual ray \(\mathbf{r}\) is created, sampled at positions \(\mathbf{x}_i\) and the outputs of \(\mathcal{F}\) are aggregated based on the visibility \(\alpha\) and transmittance \(T\)
+    </p>
+
+    <p class="mt-1">
+      \(\large \mathbf{s}(\mathbf{r}) = \sum_{i=1}^{N} T_i \alpha_i \mathbf{s}(\mathbf{x}_i)	{\normalsize \text{ with }} 	\alpha_i = 1 - \exp(-\sigma_i\delta_i) {\normalsize \text{ and }} T_i = \prod_{j=1}^{i-1} (1 - \alpha_j)  \)
+    </p>
+
+    <p class="mt-1">
+      Combined Semantic logits \(\mathbf{s}(\mathbf{r})  \) are converted into probabilities \(\mathbf{p}(\mathbf{r}) \) using softmax. The class with the highest probability is chosen to represent the semantic class of the ray \(\mathbf{r}\).
+      Both modalities (color and semantic) use a <b>unified, shared</b> geometrical representation, leading to a high cohesion.
+      To learn the semantic modality, a secondary loss term is introduced. Analog to color we focus on static, non-transient semantic classes:
+    </p>
+    <p class="mt-1">
+      \(\large L_{semantic}(\mathcal{R} \setminus \mathcal{R}^t) = - \sum_{\mathbf{r} \in (\mathcal{R} \setminus \mathcal{R}^t )} \sum_{c=1}^{C} p^c(\mathbf{r}) \log{\hat{p}^c(\mathbf{r})}
+      {\normalsize \text{ with } }
+      \mathcal{R}_t = \{\ \mathbf{r} \in \mathcal{R} | semantic_{gt}(\mathbf{r}) = vehicle \} \)
+    </p>
+
+    <p class="mt-5">
+      <b>Results:</b> We are able to render novel, unseen views in both modalities using a single inference call.
+    </p>
+
+    <div class="columns is-centered is-mobile is-multiline mt-1">
+      <div class="column is-half-mobile has-text-centered">
+          <img src="./static/images/results/gt_rgb/JAX_004_015_RGB.jpg" alt="">
+          <p class="is-hidden-tablet">(a) RGB Ground Truth.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/gt/JAX_004_015_CLS.jpg" alt="">
+        <p class="is-hidden-tablet">(b) Our Annotations.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic/JAX_004_015_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(c) Predicted Semantic.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/shadows/JAX_004_015_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(d) Predicted Lighting.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic_shaded/JAX_004_015_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(e) Structural Semantic Visualization.</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered is-mobile is-multiline mt-1">
+      <div class="column is-half-mobile has-text-centered">
+          <img src="./static/images/results/gt_rgb/JAX_068_003_RGB.jpg" alt="">
+          <p class="is-hidden-tablet">(a) RGB Ground Truth.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/gt/JAX_068_003_CLS.jpg" alt="">
+        <p class="is-hidden-tablet">(b) Our Annotations.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic/JAX_068_003_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(c) Predicted Semantic.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/shadows/JAX_068_003_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(d) Predicted Lighting.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic_shaded/JAX_068_003_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(e) Structural Semantic Visualization.</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered is-mobile is-multiline mt-1">
+      <div class="column is-half-mobile has-text-centered">
+          <img src="./static/images/results/gt_rgb/JAX_214_002_RGB.jpg" alt="">
+          <p class="is-hidden-tablet">(a) RGB Ground Truth.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/gt/JAX_214_002_CLS.jpg" alt="">
+        <p class="is-hidden-tablet">(b) Our Annotations.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic/JAX_214_002_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(c) Predicted Semantic.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/shadows/JAX_214_002_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(d) Predicted Lighting.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic_shaded/JAX_214_002_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(e) Structural Semantic Visualization.</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered is-mobile is-multiline mt-1">
+      <div class="column is-half-mobile has-text-centered">
+          <img src="./static/images/results/gt_rgb/JAX_260_007_RGB.jpg" alt="">
+          <p class="is-hidden-tablet">(a) RGB Ground Truth.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/gt/JAX_260_007_CLS.jpg" alt="">
+        <p class="is-hidden-tablet">(b) Our Annotations.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic/JAX_260_007_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(c) Predicted Semantic.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/shadows/JAX_260_007_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(d) Predicted Lighting.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered">
+        <img src="./static/images/results/semantic_shaded/JAX_260_007_RGB_-1.png" alt="">
+        <p class="is-hidden-tablet">(e) Structural Semantic Visualization.</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered is-mobile is-multiline mt-0 is-hidden-mobile">
+      <div class="column is-half-mobile has-text-centered pt-0">
+          <p>(a) RGB Ground Truth.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered pt-0">
+        <p>(b) Our Annotations.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered pt-0">
+        <p>(c) Predicted Semantic.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered pt-0">
+        <p>(d) Predicted Lighting.</p>
+      </div>
+
+      <div class="column is-half-mobile has-text-centered pt-0">
+        <p>(e) Structural Semantic Visualization.</p>
+      </div>
+    </div>
+
     </div>
   </section>
 
@@ -275,29 +464,34 @@
       This can cause local inconsistencies and artefacts in the learned color representation as the network tries to average between all given input images.
     </p>
 
-    <p class="mt-1">
-      The same parking lot across a series of training images including their capture date:
+    <p class="mt-3">
+      The same parking garage across a series of training images including their capture date:
     </p>
     <div class="columns is-centered is-mobile is-multiline mt-1">
       <div class="column is-half-mobile has-text-centered">
-          <img src="./static/images/dataset_transients/JAX_214_005_RGB.jpg" alt="">
-          <h5 class="subtitle is-6 mt-2">June 2018</h5>
+          <img src="./static/images/dataset_transients/JAX_214_005_RGB_cropped.png" alt="">
+          <!-- 20141030155732 -->
+          <h5 class="subtitle is-6 mt-2">October 2014</h5> 
       </div>
       <div class="column is-half-mobile has-text-centered">
-        <img src="./static/images/dataset_transients/JAX_214_008_RGB.jpg" alt="">
-        <h5 class="subtitle is-6 mt-2">June 2018</h5>
+        <img src="./static/images/dataset_transients/JAX_214_008_RGB_cropped.png" alt="">
+        <!-- 20150121161243 -->
+        <h5 class="subtitle is-6 mt-2">January 2015</h5>
       </div>
       <div class="column is-half-mobile has-text-centered">
-        <img src="./static/images/dataset_transients/JAX_214_012_RGB.jpg" alt="">
-        <h5 class="subtitle is-6 mt-2">June 2018</h5>
+        <img src="./static/images/dataset_transients/JAX_214_012_RGB_cropped.png" alt="">
+        <!-- 20150215161208 -->
+        <h5 class="subtitle is-6 mt-2">February 2015</h5>
       </div>
       <div class="column is-half-mobile has-text-centered">
-        <img src="./static/images/dataset_transients/JAX_214_015_RGB.jpg" alt="">
-        <h5 class="subtitle is-6 mt-2">June 2018</h5>
+        <img src="./static/images/dataset_transients/JAX_214_015_RGB_cropped.png" alt="">
+        <!-- 20150501160357 -->
+        <h5 class="subtitle is-6 mt-2">May 2015</h5>
       </div>
       <div class="column is-half-mobile has-text-centered">
-        <img src="./static/images/dataset_transients/JAX_214_016_RGB.jpg" alt="">
-        <h5 class="subtitle is-6 mt-2">June 2018</h5>
+        <img src="./static/images/dataset_transients/JAX_214_016_RGB_cropped.png" alt="">
+        <!-- 20150502161943 -->
+        <h5 class="subtitle is-6 mt-2">May 2015</h5>
       </div>
     </div>
 
@@ -321,7 +515,7 @@
 
     <p class="mt-3">
       \( \large L_{t}(\mathcal{R}^t) = \sum_{r \in \mathcal{R}^t} || 1.0 - \beta(r)  ||^2_2 
-      \text{ with } 
+      {\normalsize \text{ with } }
       \mathcal{R}_t = \{\ \mathbf{r} \in \mathcal{R} | semantic_{gt}(\mathbf{r}) = vehicle \} \)
     </p>
 
